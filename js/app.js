@@ -13,7 +13,18 @@
   var handler = {
     //saves user inputs as one entry to local storage
     saveEntry: function (){
-      
+      var input = document.querySelectorAll(".tcell");
+      user.id = input[0].values;
+      user.name = input[1].values;
+      user.address = input[2].values;
+      user.email = input[3].values;
+
+      //converts object into JSON and store in localStorage
+      localStorage.setItem("user_" + localStorage.length, JSON.stringify(
+        user));
+
+      //reloads the page
+      location.reload();
     },
 
     //clears user input fields on the page
@@ -23,10 +34,31 @@
 
     //displays user entries
     displayEntry: function(){
-      
+      if(localStorage.length > 0) {
+        var render = "<div>";
+        render += "<div id ='entry_container'> Entries: </div>";
+          for (i = 0; i < localStorage.length; i++) {
+            //gets key
+            var key = localStorage.key(i);
+            //gets data from key
+            var entry = localStorage.getItem(key);
+            //parses data back into object
+            var data = JSON.parse(entry);
+            render += "<ul>";
+            render += "<li>" + data.id + "</li>";
+            render += "<li>" + data.name + "</li>";
+            render += "<li>" + data.address+ "</li>";
+            render += "<li>" + data.email + "</li>";
+            render += "</ul>" ;
+          }
+          render += "</div>";
+          display_container.innerHTML = render;
+        }
     },
     
     clearEverything: function(){
+        localStorage.clear();
+        location.reload();
     }
   };
 
